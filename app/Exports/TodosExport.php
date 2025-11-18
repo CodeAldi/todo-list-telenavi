@@ -13,23 +13,31 @@ use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class TodosExport implements FromArray, WithHeadings, WithStrictNullComparison, ShouldAutoSize, WithStyles
 {
+    protected $todos;
+
+    public function __construct($todos)
+    {
+        $this->todos = $todos;
+    }
+
     public function title(): string
     {
         return 'Todos Report';
     }
     public function array(): array
     {
-        $todos = Todo::all();
+        // $todos = Todo::all();
+        
         $exportData = [];
         $iteration = 1;
         $total_time_tracked = 0;
 
-        foreach ($todos as $todo) {
+        foreach ($this->todos as $todo) {
             $exportData[] = [
                 '#' => $iteration,
                 'title' => $todo->title,
                 'assignee' => $todo->assignee,
-                'due_date' => Date::dateTimeToExcel($todo->due_date),
+                'due_date' => $todo->due_date,
                 'time_tracked' => $todo->time_tracked,
                 'status' => $todo->status->value,
                 'priority' => $todo->priority->value, 
@@ -37,9 +45,16 @@ class TodosExport implements FromArray, WithHeadings, WithStrictNullComparison, 
             $total_time_tracked += $todo->time_tracked;
             $iteration++;
         }
-        $baru = ['total todo ',':', count($todos), 'total time tracked', ':', $total_time_tracked];
+        $baru = ['total todo ',':', count($this->todos), 'total time tracked', ':', $total_time_tracked];
 
-        return [$exportData,$baru];    
+        return array_merge(
+            $exportData,[
+                ['','','','','','',''], // separator row
+                ['total todo ',':', count($this->todos)],
+                ['total time tracked', ':', $total_time_tracked],
+             ]
+        );
+        // return [$exportData,$baru];    
     }
     
     public function headings(): array
@@ -59,6 +74,9 @@ class TodosExport implements FromArray, WithHeadings, WithStrictNullComparison, 
     {
         // Apply bold font to the header row
         $sheet->getStyle('1')->getFont()->setBold(true);
+        $lastRow = $sheet->getHighestRow();
+        $sheet->getStyle('A' . ($lastRow - 1))->getFont()->setBold(true);
+        $sheet->getStyle('A' . ($lastRow))->getFont()->setBold(true);
         
     }
 
