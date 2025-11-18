@@ -1,11 +1,11 @@
-# 📌 Todo Management API – Laravel 12
+# 📌 Todo API – Laravel 12 - Backend dev take home test
 
 API ini digunakan untuk mengelola data Todo, melakukan export Excel, serta menyediakan data statistik untuk kebutuhan chart. Dibangun menggunakan Laravel 12 dan Laravel Excel.
 
 ## 🚀 Tech Stack
 - Laravel 12
 - PHP 8.2+
-- MySQL 8+
+- sqlite
 - Laravel Excel 3.1
 - Postman (Testing)
 
@@ -45,20 +45,12 @@ php artisan serve
 - DELETE /todos/{id}
 
 ### Export Excel
-- GET /export/excel
-- GET /export/excel/filter
+- GET /export-todos
+- GET /export-todos?filter1=xxx&filter2=yyy...
 
 ### Chart Data
 - GET /chart?type=status
 - GET /chart?type=priority
 - GET /chart?type=assignee
 
-## 📁 Struktur Folder
-```
-app/
- ├─ Models/Todo.php
- ├─ Filters/TodoFilter.php
- ├─ Exports/TodosExport.php
- ├─ Http/Controllers/
-```
 
