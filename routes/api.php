@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ExcelReportController;
 
 Route::get('/user', function (Request $request) {
@@ -11,3 +12,4 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('todos',TodoController::class);
 Route::get('/export-todos', [ExcelReportController::class, 'export']);
+Route::get('/chart', ChartController::class);
